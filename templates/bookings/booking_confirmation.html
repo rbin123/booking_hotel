@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block title %}Booking Confirmed{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="confirmation-success text-center mb-4">
+                <i class="bi bi-check-circle-fill text-success display-4 mb-3"></i>
+                <h1 class="h3 mb-2">Booking Submitted Successfully!</h1>
+                <p class="mb-0">Thank you. Your booking has been received. We will confirm shortly.</p>
+            </div>
+
+            <div class="card booking-form-card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="bi bi-receipt me-2"></i>Booking Summary</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <p class="small text-muted mb-1">Booking ID</p>
+                            <p class="fw-bold">#{{ booking.id }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="small text-muted mb-1">Status</p>
+                            <p><span class="badge bg-{% if booking.status == 'confirmed' %}success{% elif booking.status == 'cancelled' %}secondary{% else %}warning{% endif %}">{{ booking.status|title }}</span></p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <p class="small text-muted mb-1">Room</p>
+                            <p class="fw-bold">{{ booking.room.name }} ({{ booking.room.category.name }})</p>
+                            <p class="small text-muted">{{ booking.room.hotel.name }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="small text-muted mb-1">Dates</p>
+                            <p>{{ booking.check_in }} to {{ booking.check_out }}</p>
+                            <p class="small">{{ booking.get_nights }} night(s)</p>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <p class="small text-muted mb-1">Guests</p>
+                            <p>{{ booking.num_guests }} guest(s)</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="small text-muted mb-1">Total Price</p>
+                            <p class="fs-5 fw-bold text-primary">${{ booking.total_price }}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="small text-muted mb-1">Guest Name</p>
+                            <p>{{ booking.guest_name }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="small text-muted mb-1">Contact</p>
+                            <p>{{ booking.guest_email }}{% if booking.guest_phone %} &middot; {{ booking.guest_phone }}{% endif %}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-light">
+                    <a href="{% url 'rooms:room_list' %}" class="btn btn-outline-primary me-2">Browse More Rooms</a>
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'bookings:history' %}" class="btn btn-primary">View My Bookings</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

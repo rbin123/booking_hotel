@@ -1,0 +1,161 @@
+/* Hotel Booking - Custom branding and layout */
+
+:root {
+    --primary: #0d6efd;
+    --primary-dark: #0a58ca;
+    --accent: #198754;
+    --light-bg: #f8f9fa;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+}
+
+.main-content {
+    flex: 1;
+    padding-top: 76px; /* Fixed navbar height */
+    padding-bottom: 2rem;
+}
+
+/* Navbar search - hide on small screens */
+@media (max-width: 991px) {
+    .navbar-search-form {
+        display: none !important;
+    }
+}
+
+/* Room cards with hover effect */
+.room-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: none;
+    border-radius: 12px;
+    overflow: hidden;
+    height: 100%;
+}
+
+.room-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.room-card .card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+.room-card .card-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.room-card .price {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--primary);
+}
+
+.room-card .badge-available {
+    background-color: var(--accent);
+}
+
+.room-card .badge-unavailable {
+    background-color: #6c757d;
+}
+
+/* Hotel cards */
+.hotel-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: none;
+    border-radius: 12px;
+    overflow: hidden;
+    height: 100%;
+}
+
+.hotel-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.hotel-card .card-img-top {
+    height: 180px;
+    object-fit: cover;
+}
+
+/* Hero section on home */
+.hero-section {
+    background: linear-gradient(135deg, var(--primary) 0%, #0a58ca 100%);
+    color: white;
+    padding: 4rem 0;
+    border-radius: 0 0 2rem 2rem;
+    margin-bottom: 2rem;
+}
+
+.hero-section h1 {
+    font-weight: 700;
+}
+
+/* Booking form */
+.booking-form-card {
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+/* Confirmation success */
+.confirmation-success {
+    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+    border-radius: 12px;
+    padding: 2rem;
+}
+
+/* Footer */
+.footer a:hover {
+    color: #adb5bd !important;
+}
+
+/* Date inputs - ensure consistent look */
+input[type="date"].form-control {
+    cursor: pointer;
+}
+
+/* Amenities list */
+.amenities-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.amenities-list li {
+    padding: 0.25rem 0;
+    padding-left: 1.5rem;
+    position: relative;
+}
+
+.amenities-list li::before {
+    content: "\F26B";
+    font-family: "bootstrap-icons";
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+}
+
+/* Room detail gallery */
+.room-gallery img {
+    border-radius: 8px;
+    object-fit: cover;
+    height: 200px;
+    width: 100%;
+}
+
+/* Empty state */
+.empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #6c757d;
+}
+
+.empty-state i {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}

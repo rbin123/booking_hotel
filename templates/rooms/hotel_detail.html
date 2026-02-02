@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block title %}{{ hotel.name }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'rooms:hotel_list' %}">Hotels</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ hotel.name }}</li>
+        </ol>
+    </nav>
+    <div class="row">
+        <div class="col-lg-4 mb-4">
+            {% if hotel.image %}
+            <img src="{{ hotel.image.url }}" class="img-fluid rounded-3 shadow" alt="{{ hotel.name }}">
+            {% else %}
+            <div class="bg-secondary rounded-3 d-flex align-items-center justify-content-center" style="height: 280px;">
+                <i class="bi bi-building text-white display-4"></i>
+            </div>
+            {% endif %}
+        </div>
+        <div class="col-lg-8">
+            <h1>{{ hotel.name }}</h1>
+            <p class="text-muted mb-2"><i class="bi bi-geo-alt me-1"></i>{{ hotel.address }}</p>
+            {% if hotel.phone %}<p class="mb-1"><i class="bi bi-telephone me-1"></i>{{ hotel.phone }}</p>{% endif %}
+            {% if hotel.email %}<p class="mb-3"><i class="bi bi-envelope me-1"></i>{{ hotel.email }}</p>{% endif %}
+            {% if hotel.description %}<p class="lead">{{ hotel.description }}</p>{% endif %}
+        </div>
+    </div>
+
+    <h2 class="h4 mt-4 mb-3">Rooms at this hotel</h2>
+    <div class="row g-4">
+        {% for room in hotel.rooms.all %}
+        {% if room.is_available %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card room-card h-100">
+                {% with img=room.images.first %}
+                {% if img %}
+                <img src="{{ img.image.url }}" class="card-img-top" alt="{{ room.name }}">
+                {% else %}
+                <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                    <i class="bi bi-door-open text-secondary fs-1"></i>
+                </div>
+                {% endif %}
+                {% endwith %}
+                <div class="card-body">
+                    <span class="badge bg-secondary mb-2">{{ room.category.name }}</span>
+                    <h5 class="card-title">{{ room.name }}</h5>
+                    <p class="card-text small">{{ room.description|truncatewords:15 }}</p>
+                    <p class="price mb-2">${{ room.price_per_night }}/night</p>
+                    <a href="{% url 'rooms:room_detail' room.pk %}" class="btn btn-primary btn-sm">View & Book</a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% empty %}
+        <div class="col-12">
+            <div class="empty-state">
+                <i class="bi bi-door-open text-muted"></i>
+                <p>No rooms available at this hotel.</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

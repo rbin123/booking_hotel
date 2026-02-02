@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block title %}{{ room.name }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'rooms:room_list' %}">Rooms</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'rooms:hotel_detail' room.hotel.pk %}">{{ room.hotel.name }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ room.name }}</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <!-- Gallery -->
+        <div class="col-lg-8 mb-4">
+            {% if room.images.exists %}
+            <div class="room-gallery">
+                <div class="row g-2">
+                    {% for img in room.images.all %}
+                    <div class="col-6">
+                        <img src="{{ img.image.url }}" class="img-fluid w-100" alt="{{ img.caption|default:room.name }}">
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% else %}
+            <div class="bg-light rounded-3 d-flex align-items-center justify-content-center" style="height: 350px;">
+                <i class="bi bi-image text-secondary display-4"></i>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card booking-form-card">
+                <div class="card-body">
+                    <span class="badge bg-secondary mb-2">{{ room.category.name }}</span>
+                    <h1 class="h3 mb-2">{{ room.name }}</h1>
+                    <p class="text-muted small mb-2"><i class="bi bi-building me-1"></i>{{ room.hotel.name }}</p>
+                    <p class="price fs-4 mb-3">${{ room.price_per_night }} <small class="text-muted">/ night</small></p>
+                    <p class="small"><i class="bi bi-people me-1"></i>Max {{ room.max_guests }} guests</p>
+                    <a href="{% url 'bookings:create' room.pk %}{% if request.GET.check_in %}?check_in={{ request.GET.check_in }}&check_out={{ request.GET.check_out }}{% endif %}" class="btn btn-primary w-100 btn-lg">Book Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-lg-8">
+            <h2 class="h5 mb-3">Description</h2>
+            <p>{{ room.description }}</p>
+            <h2 class="h5 mb-3">Amenities</h2>
+            <ul class="amenities-list">
+                {% for amenity in room.get_amenities_list %}
+                <li>{{ amenity }}</li>
+                {% empty %}
+                <li>No amenities listed.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% block title %}Rooms{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">Available Rooms</h1>
+
+    <!-- Search form -->
+    <div class="card booking-form-card mb-4">
+        <div class="card-body">
+            <h5 class="card-title mb-3"><i class="bi bi-calendar-range me-2"></i>Search by dates</h5>
+            <form action="{% url 'rooms:room_list' %}" method="get" class="row g-3">
+                <div class="col-md-3">
+                    <label for="id_check_in" class="form-label">Check-in</label>
+                    <input type="date" name="check_in" id="id_check_in" class="form-control" value="{{ request.GET.check_in }}" required>
+                </div>
+                <div class="col-md-3">
+                    <label for="id_check_out" class="form-label">Check-out</label>
+                    <input type="date" name="check_out" id="id_check_out" class="form-control" value="{{ request.GET.check_out }}" required>
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100"><i class="bi bi-search me-2"></i>Search</button>
+                </div>
+            </form>
+            {% if form.errors %}
+            <div class="alert alert-danger mt-2 mb-0">
+                {% for field in form %}{% for err in field.errors %}{{ err }}{% endfor %}{% endfor %}
+                {% for err in form.non_field_errors %}{{ err }}{% endfor %}
+            </div>
+            {% endif %}
+            {% if check_in and check_out %}
+            <p class="small text-muted mt-2 mb-0">Showing rooms available from {{ check_in }} to {{ check_out }}.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Categories filter -->
+    <div class="mb-3">
+        <a href="{% url 'rooms:room_list' %}{% if request.GET.check_in %}?check_in={{ request.GET.check_in }}&check_out={{ request.GET.check_out }}{% endif %}" class="btn btn-sm btn-outline-secondary me-1">All</a>
+        {% for cat in categories %}
+        <a href="?category={{ cat.slug }}{% if request.GET.check_in %}&check_in={{ request.GET.check_in }}&check_out={{ request.GET.check_out }}{% endif %}" class="btn btn-sm btn-outline-secondary me-1">{{ cat.name }}</a>
+        {% endfor %}
+    </div>
+
+    <!-- Room cards -->
+    <div class="row g-4">
+        {% for room in rooms %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card room-card h-100">
+                {% with img=room.images.first %}
+                {% if img %}
+                <img src="{{ img.image.url }}" class="card-img-top" alt="{{ room.name }}">
+                {% else %}
+                <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                    <i class="bi bi-door-open text-secondary fs-1"></i>
+                </div>
+                {% endif %}
+                {% endwith %}
+                <div class="card-body">
+                    <span class="badge bg-secondary mb-2">{{ room.category.name }}</span>
+                    <span class="badge badge-available ms-1">Available</span>
+                    <h5 class="card-title mt-2">{{ room.name }}</h5>
+                    <p class="card-text small">{{ room.description|truncatewords:15 }}</p>
+                    <p class="price">${{ room.price_per_night }}/night</p>
+                    <p class="small text-muted mb-2">
+                        <i class="bi bi-people me-1"></i>Up to {{ room.max_guests }} guests
+                    </p>
+                    <a href="{% url 'rooms:room_detail' room.pk %}{% if check_in and check_out %}?check_in={{ check_in }}&check_out={{ check_out }}{% endif %}" class="btn btn-primary btn-sm">View & Book</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="empty-state">
+                <i class="bi bi-door-open text-muted"></i>
+                <p>No rooms found. Try different dates or check back later.</p>
+                <a href="{% url 'rooms:room_list' %}" class="btn btn-outline-primary">Clear search</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
