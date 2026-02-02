@@ -17,6 +17,9 @@ DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 RAILWAY_STATIC_URL = os.environ.get('RAILWAY_STATIC_URL')
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*.up.railway.app,localhost,127.0.0.1').split(',') if os.environ.get('ALLOWED_HOSTS') else ['*.up.railway.app', 'localhost', '127.0.0.1']
 
+# CSRF protection for Railway HTTPS
+CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS', 'https://*.up.railway.app').split(',') if os.environ.get('CSRF_TRUSTED_ORIGINS') else ['https://*.up.railway.app']
+
 # Application definition
 INSTALLED_APPS = [
     'whitenoise.runserver_nostatic',
