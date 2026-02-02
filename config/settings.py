@@ -18,7 +18,15 @@ RAILWAY_STATIC_URL = os.environ.get('RAILWAY_STATIC_URL')
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*.up.railway.app,*.railway.app,localhost,127.0.0.1').split(',') if os.environ.get('ALLOWED_HOSTS') else ['*.up.railway.app', '*.railway.app', 'localhost', '127.0.0.1']
 
 # CSRF protection for Railway HTTPS
-CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS', 'https://*.up.railway.app,https://*.railway.app').split(',') if os.environ.get('CSRF_TRUSTED_ORIGINS') else ['https://*.up.railway.app', 'https://*.railway.app']
+CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS', 'https://*.up.railway.app,https://*.railway.app,http://localhost,https://localhost').split(',') if os.environ.get('CSRF_TRUSTED_ORIGINS') else ['https://*.up.railway.app', 'https://*.railway.app', 'http://localhost', 'https://localhost']
+
+# Security settings for Railway
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = False  # Railway handles SSL
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
 
 # Application definition
 INSTALLED_APPS = [
