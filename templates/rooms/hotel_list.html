@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}Hotels{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">Our Hotels</h1>
+    <div class="row g-4">
+        {% for hotel in hotels %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card hotel-card h-100">
+                {% if hotel.image %}
+                <img src="{{ hotel.image.url }}" class="card-img-top" alt="{{ hotel.name }}">
+                {% else %}
+                <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 180px;">
+                    <i class="bi bi-building text-white fs-1"></i>
+                </div>
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ hotel.name }}</h5>
+                    <p class="card-text small text-muted">{{ hotel.address|truncatewords:12 }}</p>
+                    <a href="{% url 'rooms:hotel_detail' hotel.pk %}" class="btn btn-primary btn-sm">View Hotel & Rooms</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="empty-state">
+                <i class="bi bi-building text-muted"></i>
+                <p>No hotels listed yet.</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% if is_paginated %}
+    <nav class="mt-4">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+            {% endif %}
+            <li class="page-item disabled"><span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span></li>
+            {% if page_obj.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+{% endblock %}
