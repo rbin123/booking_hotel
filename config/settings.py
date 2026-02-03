@@ -15,7 +15,9 @@ DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 
 # For Railway deployment
 RAILWAY_STATIC_URL = os.environ.get('RAILWAY_STATIC_URL')
-ALLOWED_HOSTS = ["*"]  # Allow all hosts for deployment testing. Change to your domain for production.
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',')
+
+# For Render, set ALLOWED_HOSTS env var to your Render domain (or * for testing)
 
 # CSRF protection for Railway HTTPS
 CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS', 'https://*.up.railway.app,https://*.railway.app,http://localhost,https://localhost').split(',') if os.environ.get('CSRF_TRUSTED_ORIGINS') else ['https://*.up.railway.app', 'https://*.railway.app', 'http://localhost', 'https://localhost']
@@ -97,11 +99,14 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
+
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# On Render, collectstatic will create staticfiles/ at build time
 
 # Media files (uploaded images)
 MEDIA_URL = 'media/'
